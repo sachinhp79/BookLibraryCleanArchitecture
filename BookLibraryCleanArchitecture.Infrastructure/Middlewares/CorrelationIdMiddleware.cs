@@ -1,4 +1,6 @@
-﻿using BookLibraryCleanArchitecture.Client.Constants;
+﻿using BookLibraryCleanArchitecture.Common.Constants;
+using Microsoft.AspNetCore.Http;
+using Serilog.Context;
 
 namespace BookLibraryCleanArchitecture.Client.Middlewares
 {
@@ -23,7 +25,7 @@ namespace BookLibraryCleanArchitecture.Client.Middlewares
             context.Response.Headers[HeaderKey] = correlationId;
 
             // 4️⃣ Push into Serilog context so every log line includes it
-            Serilog.Context.LogContext.PushProperty(MiddlewareConstants.CORRELATION_ID, correlationId);
+            LogContext.PushProperty(MiddlewareConstants.CORRELATION_ID, correlationId);
 
             // 5️⃣ Store in HttpContext.Items for downstream access
             context.Items[MiddlewareConstants.CORRELATION_ID] = correlationId;

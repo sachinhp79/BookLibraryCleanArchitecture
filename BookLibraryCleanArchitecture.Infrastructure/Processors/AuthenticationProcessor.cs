@@ -33,18 +33,18 @@ namespace BookLibraryCleanArchitecture.Infrastructure.Processors
             return Convert.ToBase64String(randomNumber);
         }
 
-        public void WriteTokenToCookie(string token, int expirationTimeInDays)
+        public void WriteTokenToCookie(string token, string tokenName, int expirationTime)
         {
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTime.UtcNow.AddDays(expirationTimeInDays),
+                Expires = DateTime.UtcNow.AddDays(expirationTime),
                 Secure = true,
                 SameSite = SameSiteMode.Strict,
                 Path = "/"
             };
 
-            httpContextAccessor.HttpContext?.Response.Cookies.Append("refreshToken", token, cookieOptions);
+            httpContextAccessor.HttpContext?.Response.Cookies.Append(tokenName, token, cookieOptions);
         }
     }
 }

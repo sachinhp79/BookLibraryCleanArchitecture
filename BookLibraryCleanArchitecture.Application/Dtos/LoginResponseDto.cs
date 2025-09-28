@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookLibraryCleanArchitecture.Application.Dtos
 {
-    public sealed record RegisterResponseDto
+    public sealed record LoginResponseDto
     {
         // Unique identifier of the user (matches user.Id)
         public Guid UserId { get; init; }
@@ -17,11 +17,20 @@ namespace BookLibraryCleanArchitecture.Application.Dtos
         // Email of the registered user
         public string Email { get; init; } = string.Empty;
 
+        // Access token issued at registration/login
+        public string AccessToken { get; init; } = string.Empty;
+
+        // Refresh token issued alongside the access token
+        public string RefreshToken { get; init; } = string.Empty;
+
+        // UTC expiry timestamp for the refresh token
+        public DateTime RefreshTokenExpiresAtUtc { get; init; }
+
         // Parameterless constructor for serializers / framework usage
-        public RegisterResponseDto() { }
+        public LoginResponseDto() { }
 
         // Convenience constructor to create a fully populated DTO
-        public RegisterResponseDto(
+        public LoginResponseDto(
             Guid userId,
             string userName,
             string email,
@@ -32,6 +41,9 @@ namespace BookLibraryCleanArchitecture.Application.Dtos
             UserId = userId;
             UserName = userName ?? throw new ArgumentNullException(nameof(userName));
             Email = email ?? throw new ArgumentNullException(nameof(email));
+            AccessToken = accessToken ?? throw new ArgumentNullException(nameof(accessToken));
+            RefreshToken = refreshToken ?? throw new ArgumentNullException(nameof(refreshToken));
+            RefreshTokenExpiresAtUtc = refreshTokenExpiresAtUtc;
         }
     }
 }

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLibraryCleanArchitectur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLibraryCleanArchitecture.Infrastructure", "BookLibraryCleanArchitecture.Infrastructure\BookLibraryCleanArchitecture.Infrastructure.csproj", "{35C8B08E-B72B-4D94-BB3F-8DB14A5A8DDD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLibraryCleanArchitecture.Common", "BookLibraryCleanArchitecture.Common\BookLibraryCleanArchitecture.Common.csproj", "{CFBF629B-E15F-421E-AA0E-05453E3CFB15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{35C8B08E-B72B-4D94-BB3F-8DB14A5A8DDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35C8B08E-B72B-4D94-BB3F-8DB14A5A8DDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35C8B08E-B72B-4D94-BB3F-8DB14A5A8DDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFBF629B-E15F-421E-AA0E-05453E3CFB15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFBF629B-E15F-421E-AA0E-05453E3CFB15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFBF629B-E15F-421E-AA0E-05453E3CFB15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFBF629B-E15F-421E-AA0E-05453E3CFB15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

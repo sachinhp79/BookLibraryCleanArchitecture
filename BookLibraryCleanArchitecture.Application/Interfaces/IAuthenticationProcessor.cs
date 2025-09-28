@@ -11,6 +11,6 @@ namespace BookLibraryCleanArchitecture.Application.Interfaces
     {
         string GenerateJwtToken(ApplicationUser user);
         string GenerateRefreshToken();
-        void WriteTokenToCookie(string token, int expirationTimeInDays);
+        void WriteTokenToCookie(string token, string tokenName, int expirationTimeInDays);
     }
 }
