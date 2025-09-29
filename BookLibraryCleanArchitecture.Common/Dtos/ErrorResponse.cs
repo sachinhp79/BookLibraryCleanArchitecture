@@ -24,11 +24,4 @@ namespace BookLibraryCleanArchitecture.Common.Dtos
         [JsonPropertyName("correlationId")]
         public string CorrelationId { get; init; } = string.Empty;
     }
-
-    public class ExtendedProblemDetails : ProblemDetails
-    {
-        public string? ErrorCode { get; set; }
-        public string? CorrelationId { get; set; }
-        public IEnumerable<ValidationErrorDto>? Errors { get; set; }
-    }
 }

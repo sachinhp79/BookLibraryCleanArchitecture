@@ -109,13 +109,13 @@ namespace BookLibraryCleanArchitecture.Application.Services
         {
             if (string.IsNullOrEmpty(refreshToken))
             {
-                throw new AuthenticationException("Refresh token is required.", ErrorInformation.INVALID_TOKEN.ToString());
+                throw new TokenGenerationException("Refresh token is required.", ErrorInformation.INVALID_TOKEN.ToString());
             }
 
             var user = _userManager.Users.FirstOrDefault(u => string.Equals(u.RefreshToken, refreshToken));
             if (user is null || user.RefreshTokenExpiryTimeInUtc <= DateTime.UtcNow)
             {
-                throw new AuthenticationException("Invalid or expired refresh token.", ErrorInformation.INVALID_TOKEN.ToString());
+                throw new TokenGenerationException("Invalid or expired refresh token.", ErrorInformation.INVALID_TOKEN.ToString());
             }
              
             var newAccessToken = _authenticationProcessor.GenerateJwtToken(user);
@@ -131,6 +131,7 @@ namespace BookLibraryCleanArchitecture.Application.Services
             // writing tokens to HttpOnly cookies
             _authenticationProcessor.WriteTokenToCookie(newAccessToken, ApplicationConstants.JwtAccessToken, _options.Value.ExpirationTimeInMinutes);
             _authenticationProcessor.WriteTokenToCookie(newRefreshToken, ApplicationConstants.RefreshToken, _options.Value.RefreshTokenExpirationInDays);
+
             return new LoginResponseDto
             {
                 UserId = user.Id,

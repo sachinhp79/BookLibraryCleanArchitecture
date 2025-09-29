@@ -1,6 +1,6 @@
 ﻿using BookLibraryCleanArchitecture.Application.Dtos;
 using FluentValidation;
-using BookLibraryCleanArchitecture.Client.Constants;
+using BookLibraryCleanArchitecture.Common.Constants;
 
 namespace BookLibraryCleanArchitecture.Client.Validators
 {

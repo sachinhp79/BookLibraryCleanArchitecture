@@ -1,6 +1,10 @@
 ﻿using BookLibraryCleanArchitecture.Application.Dtos;
 using BookLibraryCleanArchitecture.Application.Interfaces;
+using BookLibraryCleanArchitecture.Infrastructure.Interfaces;
+using BookLibraryCleanArchitecture.Infrastructure.Mappers;
+using BookLibraryCleanArchitecture.Infrastructure.Middlewares;
 using BookLibraryCleanArchitecture.Infrastructure.Processors;
+using BookLibraryCleanArchitecture.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -18,14 +22,23 @@ namespace BookLibraryCleanArchitecture.Client.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             // Register application-specific services here
-            services.AddScoped<IAuthenticationProcessor, AuthenticationProcessor>();
             return services;
         }
 
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
+
             // Register infrastructure-specific services here
             // e.g., services.AddTransient<IMyInfrastructureService, MyInfrastructureService>();
+            services.AddScoped<IAuthenticationProcessor, AuthenticationProcessor>();
+            services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
+            services.AddProblemDetails(); // Enables RFC-compliant error formatting
+            services.AddSingleton<IProblemDetailsService, BookLibraryProblemDetailsService>();
+            services.AddExceptionHandler<GlobalExceptionHandler>();
+            services.AddSingleton<IExceptionProblemDetailsMapper, AuthenticationExceptionMapper>();
+            services.AddSingleton<IExceptionProblemDetailsMapper, TokenGenerationExceptionMapper>();
+            services.AddSingleton<IExceptionProblemDetailsMapper, RegistrationExceptionMapper>();
+
             return services;
         }
 
@@ -36,22 +49,14 @@ namespace BookLibraryCleanArchitecture.Client.Extensions
             return services;
         }
 
-        public static IServiceCollection AddCustomisedMiddlewares(this IServiceCollection services)
-        {
-            // Register custom middlewares here
-            // e.g., services.AddTransient<MyCustomMiddleware>();
-
-            return services;
-        }
-
         public static IServiceCollection AddAllServices(this IServiceCollection services)
         {
-            services.AddAuthentication(services.BuildServiceProvider().GetRequiredService<IConfiguration>());
-            services.AddAuthorization();
             services.AddClientServices();
             services.AddApplicationServices();
             services.AddInfrastructureServices();
             services.AddDomainServices();
+            services.AddAuthentication(services.BuildServiceProvider().GetRequiredService<IConfiguration>());
+            services.AddAuthorization();
             return services;
         }
 

@@ -1,4 +1,4 @@
-﻿namespace BookLibraryCleanArchitecture.Client.Constants
+﻿namespace BookLibraryCleanArchitecture.Common.Constants
 {
     public class ValidationLengths
     {

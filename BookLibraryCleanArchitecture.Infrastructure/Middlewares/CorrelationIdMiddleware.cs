@@ -24,10 +24,10 @@ namespace BookLibraryCleanArchitecture.Client.Middlewares
             // Add to response header so client can see it
             context.Response.Headers[HeaderKey] = correlationId;
 
-            // 4️⃣ Push into Serilog context so every log line includes it
+            // Push into Serilog context so every log line includes it
             LogContext.PushProperty(MiddlewareConstants.CORRELATION_ID, correlationId);
 
-            // 5️⃣ Store in HttpContext.Items for downstream access
+            // Store in HttpContext.Items for downstream access
             context.Items[MiddlewareConstants.CORRELATION_ID] = correlationId;
 
             await _next(context); // Continue pipeline
