@@ -22,14 +22,14 @@ namespace BookLibraryCleanArchitecture.Infrastructure.Services
 
             _ = problemDetails is ExtendedProblemDetails extendedProblemDetails
                 ? extendedProblemDetails.CorrelationId = correlationId?.ToString()
-                : problemDetails.Extensions["correlationId"] = correlationId?.ToString();
+                : problemDetails.Extensions[MiddlewareConstants.CORRELATION_ID] = correlationId?.ToString();
 
             _logger.LogError(context.Exception, "Error occurred: {Title} - {CorrelationId}", problemDetails.Title, correlationId);
 
             httpContext.Response.StatusCode = problemDetails.Status ?? StatusCodes.Status500InternalServerError;
             httpContext.Response.ContentType = "application/json";
 
-            await httpContext.Response.WriteAsJsonAsync(problemDetails);
+            await httpContext.Response.WriteAsJsonAsync(problemDetails);    
 
         }
     }

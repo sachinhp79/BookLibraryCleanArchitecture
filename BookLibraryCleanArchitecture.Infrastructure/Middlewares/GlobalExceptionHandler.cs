@@ -1,4 +1,5 @@
 ﻿using BookLibraryCleanArchitecture.Application.Exceptions;
+using BookLibraryCleanArchitecture.Common.Constants;
 using BookLibraryCleanArchitecture.Common.Dtos;
 using BookLibraryCleanArchitecture.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Diagnostics;
@@ -16,8 +17,8 @@ namespace BookLibraryCleanArchitecture.Infrastructure.Middlewares
 
         public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken cancellationToken)
         {
-            var correlationId = context.Items["CorrelationId"]?.ToString() ?? context.TraceIdentifier;
-            context.Response.Headers["X-Correlation-ID"] = correlationId;
+            var correlationId = context.Items[MiddlewareConstants.CORRELATION_ID]?.ToString() ?? context.TraceIdentifier;
+            context.Response.Headers[MiddlewareConstants.CORRELATION_ID_HEADER] = correlationId;
 
             var mapper = _exceptionProblemDetailsMappers.FirstOrDefault(m => m.CanHandle(exception));
 
@@ -26,7 +27,7 @@ namespace BookLibraryCleanArchitecture.Infrastructure.Middlewares
             await _problemDetailsService.WriteAsync(new ProblemDetailsContext
             {
                 HttpContext = context,
-                ProblemDetails = problemDetailsFromMapper,
+                ProblemDetails = problemDetailsFromMapper!,
                 Exception = exception
             });
             return true;

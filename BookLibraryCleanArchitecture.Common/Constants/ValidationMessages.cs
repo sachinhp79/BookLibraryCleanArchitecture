@@ -22,9 +22,12 @@
         public static readonly string GenericRegistrationError = $"An error occured during user Registration.";
         public static readonly string GenericAutheticationError = $"An error occured during user Authetication.";
         public static readonly string GenericTokenGenerationError = $"An error occured during Token Generation.";
+        public static readonly string GenericUnhandledExceptionError = $"Internal Server error.";
 
         public static readonly string AuthenticationErrorTitle = "Authentication Error";
         public static readonly string RegistrationErrorTitle = "Registration Error";
         public static readonly string TokenGenerationErrorTitle = "Token Generation Error";
+        public static readonly string ValidationErrorTitle = "Validation Error";
+        public static readonly string UnhandledExceptionErrorTitle = "An unexpected error occurred.";
     }
 }

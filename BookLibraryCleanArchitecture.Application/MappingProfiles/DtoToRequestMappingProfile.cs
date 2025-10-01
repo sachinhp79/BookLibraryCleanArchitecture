@@ -13,7 +13,7 @@ namespace BookLibraryCleanArchitecture.Application.MappingProfiles
     {
         public DtoToRequestMappingProfile()
         {
-            CreateMap<RegisterRequestDto, RegisterRequest>();
+            CreateMap<                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 RegisterRequestDto, RegisterRequest>();
         }
     }
 }

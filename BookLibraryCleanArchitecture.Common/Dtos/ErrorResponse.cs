@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BookLibraryCleanArchitecture.Common.Constants;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json.Serialization;
 
@@ -21,7 +22,7 @@ namespace BookLibraryCleanArchitecture.Common.Dtos
         [JsonPropertyName("errors")]
         public IEnumerable<ValidationErrorDto>? Errors { get; init; }
 
-        [JsonPropertyName("correlationId")]
+        [JsonPropertyName(MiddlewareConstants.CORRELATION_ID)]
         public string CorrelationId { get; init; } = string.Empty;
     }
 }
