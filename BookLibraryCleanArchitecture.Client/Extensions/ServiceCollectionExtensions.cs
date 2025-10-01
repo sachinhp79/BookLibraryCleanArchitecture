@@ -1,16 +1,23 @@
-﻿using BookLibraryCleanArchitecture.Application.Dtos;
+﻿using BookLibraryCleanArchitecture.Application.Commands;
+using BookLibraryCleanArchitecture.Application.Dtos;
 using BookLibraryCleanArchitecture.Application.Interfaces;
+using BookLibraryCleanArchitecture.Application.MappingProfiles;
+using BookLibraryCleanArchitecture.Application.Services;
+using BookLibraryCleanArchitecture.Application.Validators;
 using BookLibraryCleanArchitecture.Infrastructure.Interfaces;
 using BookLibraryCleanArchitecture.Infrastructure.Mappers;
 using BookLibraryCleanArchitecture.Infrastructure.Middlewares;
 using BookLibraryCleanArchitecture.Infrastructure.Processors;
 using BookLibraryCleanArchitecture.Infrastructure.Services;
+using FluentValidation;
+using MediatR;
+using MediatR.Extensions.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BookLibraryCleanArchitecture.Client.Extensions
 {
-    internal static class ServiceCollectionExtensions
+    public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddClientServices(this IServiceCollection services)
         {
@@ -22,6 +29,15 @@ namespace BookLibraryCleanArchitecture.Client.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             // Register application-specific services here
+            services.AddScoped<IAccountService, AccountService>();
+
+            // AutoMapper: register mapping profiles from the Application project
+            services.AddAutoMapper(cfg => { }, typeof(DtoToRequestMappingProfile).Assembly);
+
+            // MediatR: register handlers from the Application project
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RegisterUserCommand).Assembly));
+            services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
+
             return services;
         }
 
@@ -30,6 +46,7 @@ namespace BookLibraryCleanArchitecture.Client.Extensions
 
             // Register infrastructure-specific services here
             // e.g., services.AddTransient<IMyInfrastructureService, MyInfrastructureService>();
+            services.AddHttpContextAccessor();
             services.AddScoped<IAuthenticationProcessor, AuthenticationProcessor>();
             services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
             services.AddProblemDetails(); // Enables RFC-compliant error formatting
@@ -38,6 +55,8 @@ namespace BookLibraryCleanArchitecture.Client.Extensions
             services.AddSingleton<IExceptionProblemDetailsMapper, AuthenticationExceptionMapper>();
             services.AddSingleton<IExceptionProblemDetailsMapper, TokenGenerationExceptionMapper>();
             services.AddSingleton<IExceptionProblemDetailsMapper, RegistrationExceptionMapper>();
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
 
             return services;
         }
@@ -81,7 +100,7 @@ namespace BookLibraryCleanArchitecture.Client.Extensions
                     ValidateIssuerSigningKey = true,
                     ValidAudience = jwtOptions.Audience,
                     ValidIssuer = jwtOptions.Issuer,
-                    IssuerSigningKey = JwtTokenGenerator.GetSymmetricSecurityKey(jwtOptions.SecretKey),
+                    IssuerSigningKey = JwtTokenGenerator.GetSymmetricSecurityKey(jwtOptions.Secret),
                 };
 
                 /* if we store the JWT in the cookie, we need to read it from there */

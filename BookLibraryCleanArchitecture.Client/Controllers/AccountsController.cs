@@ -1,4 +1,5 @@
-﻿using BookLibraryCleanArchitecture.Application.Dtos;
+﻿using BookLibraryCleanArchitecture.Application.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibraryCleanArchitecture.Client.Controllers
@@ -7,6 +8,12 @@ namespace BookLibraryCleanArchitecture.Client.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
+        private readonly IMediator _mediator;
+
+        public AccountsController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }   
 
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -15,11 +22,11 @@ namespace BookLibraryCleanArchitecture.Client.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
-        public async Task<IActionResult> RegisterUserAsync([FromBody] RegisterRequestDto registerRequestDto)
+        public async Task<IActionResult> RegisterUserAsync([FromBody] RegisterUserCommand registerRequestDto)
         {
-            // The Ok() method returns an OkObjectResult, which is not awaitable.
-            // Simply return Ok() without await.
-            return Ok("Register endpoint");
+            var result = await _mediator.Send(registerRequestDto);
+
+            return Created(result.UserId.ToString(), result);
         }
     }
 }

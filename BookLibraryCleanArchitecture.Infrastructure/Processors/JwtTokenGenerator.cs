@@ -19,7 +19,7 @@ namespace BookLibraryCleanArchitecture.Infrastructure.Processors
         public string BuildToken(ApplicationUser user, IOptions<JwtOptions> options)
         {
             var jwtOptions = options.Value;
-            var signingCredentials = GetSigningCredentials(jwtOptions.SecretKey);
+            var signingCredentials = GetSigningCredentials(jwtOptions.Secret);
 
             var jwtToken = new JwtSecurityToken(
                 issuer: jwtOptions.Issuer,

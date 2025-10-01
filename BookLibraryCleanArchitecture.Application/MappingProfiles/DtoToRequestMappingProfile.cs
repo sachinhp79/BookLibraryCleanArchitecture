@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
+using BookLibraryCleanArchitecture.Application.Commands;
 using BookLibraryCleanArchitecture.Application.Dtos;
 using BookLibraryCleanArchitecture.Domain.Request;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookLibraryCleanArchitecture.Application.MappingProfiles
 {
@@ -13,7 +9,9 @@ namespace BookLibraryCleanArchitecture.Application.MappingProfiles
     {
         public DtoToRequestMappingProfile()
         {
-            CreateMap<                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 RegisterRequestDto, RegisterRequest>();
+            CreateMap<RegisterUserCommand, RegisterRequestDto>();
+            CreateMap<RegisterRequestDto, RegisterRequest>();
+            CreateMap<LoginRequestDto, LoginRequest>();
         }
     }
 }

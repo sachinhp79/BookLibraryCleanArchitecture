@@ -11,13 +11,13 @@ namespace BookLibraryCleanArchitecture.Infrastructure.Processors
     {
         private readonly IOptions<JwtOptions> _options;
         private readonly ITokenGenerator _tokenGenerator;
-        private readonly HttpContextAccessor httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthenticationProcessor(IOptions<JwtOptions> options, ITokenGenerator tokenGenerator, HttpContextAccessor httpContextAccessor)
+        public AuthenticationProcessor(IOptions<JwtOptions> options, ITokenGenerator tokenGenerator, IHttpContextAccessor httpContextAccessor)
         {
             _options = options;
             _tokenGenerator = tokenGenerator;
-            this.httpContextAccessor = httpContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public string GenerateJwtToken(ApplicationUser user)
@@ -44,7 +44,7 @@ namespace BookLibraryCleanArchitecture.Infrastructure.Processors
                 Path = "/"
             };
 
-            httpContextAccessor.HttpContext?.Response.Cookies.Append(tokenName, token, cookieOptions);
+            _httpContextAccessor.HttpContext?.Response.Cookies.Append(tokenName, token, cookieOptions);
         }
     }
 }

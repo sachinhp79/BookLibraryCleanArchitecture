@@ -2,7 +2,7 @@
 using FluentValidation;
 using BookLibraryCleanArchitecture.Common.Constants;
 
-namespace BookLibraryCleanArchitecture.Client.Validators
+namespace BookLibraryCleanArchitecture.Application.Validators
 {
     public class RegisterRequestValidator : AbstractValidator<RegisterRequestDto>
     {

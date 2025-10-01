@@ -4,9 +4,7 @@ using BookLibraryCleanArchitecture.Application.Enums;
 using BookLibraryCleanArchitecture.Application.Exceptions;
 using BookLibraryCleanArchitecture.Application.Interfaces;
 using BookLibraryCleanArchitecture.Domain.Entities;
-using BookLibraryCleanArchitecture.Domain.Request;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
