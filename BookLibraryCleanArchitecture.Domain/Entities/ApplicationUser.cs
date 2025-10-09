@@ -6,7 +6,7 @@ namespace BookLibraryCleanArchitecture.Domain.Entities
     {
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
-        public Role Role { get; set; }
+        public string? Role { get; set; }
         public string? FullName { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryTimeInUtc { get; set; }
@@ -21,7 +21,8 @@ namespace BookLibraryCleanArchitecture.Domain.Entities
                 LastName = lastName,
                 Email = email,
                 UserName = userName,
-                SecurityStamp = Guid.NewGuid().ToString()
+                SecurityStamp = Guid.NewGuid().ToString(),
+                Role = Roles.User.ToString(),
             };
         }
 

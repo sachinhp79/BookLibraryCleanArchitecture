@@ -1,6 +1,6 @@
 ﻿namespace BookLibraryCleanArchitecture.Domain.Entities
 {
-    public enum Role
+    public enum Roles
     {
         Admin,
         User,

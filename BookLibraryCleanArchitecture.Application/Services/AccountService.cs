@@ -10,20 +10,19 @@ using Microsoft.Extensions.Options;
 
 namespace BookLibraryCleanArchitecture.Application.Services
 {
-    public class AccountService : IAccountService
+    public class AccountService(
+        IAuthenticationProcessor authenticationProcessor,
+        UserManager<ApplicationUser> userManager,
+        ILogger<AccountService> logger,
+        IOptions<JwtOptions> options,
+        RoleManager<IdentityRole<Guid>> roleManager
+    ) : IAccountService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IAuthenticationProcessor _authenticationProcessor;
-        private readonly IOptions<JwtOptions> _options;
-        private readonly ILogger<AccountService> _logger;
-
-        public AccountService(IAuthenticationProcessor authenticationProcessor, UserManager<ApplicationUser> userManager, ILogger<AccountService> logger, IOptions<JwtOptions> options)
-        {
-            _authenticationProcessor = authenticationProcessor;
-            _userManager = userManager;
-            _logger = logger;
-            _options = options;
-        }
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
+        private readonly IAuthenticationProcessor _authenticationProcessor = authenticationProcessor;
+        private readonly IOptions<JwtOptions> _options = options;
+        private readonly ILogger<AccountService> _logger = logger;
+        private readonly RoleManager<IdentityRole<Guid>> _roleManager = roleManager;        
 
         public async Task<RegisterResponseDto> RegisterUserAsync(RegisterRequestDto request)
         {
@@ -31,6 +30,17 @@ namespace BookLibraryCleanArchitecture.Application.Services
             
             if (userExists is not null)
                 throw new RegistrationException("User already exists!", ErrorInformation.USER_ALREADY_EXISTS.ToString());
+
+            var roleName = Roles.User.ToString();
+            if (!await _roleManager.RoleExistsAsync(roleName))
+            {
+                var createRoleResult = await _roleManager.CreateAsync(new IdentityRole<Guid>(roleName));
+                if (!createRoleResult.Succeeded)
+                {
+                    var errors = string.Join(", ", createRoleResult.Errors.Select(e => e.Description));
+                    throw new RegistrationException($"Failed to create role '{roleName}': {errors}", ErrorInformation.ROLE_ASSIGNMENT_FAILED.ToString());
+                }
+            }
 
             var user = ApplicationUser.Create(request.FirstName, request.LastName, request.Email, request.Email);
 
@@ -41,7 +51,7 @@ namespace BookLibraryCleanArchitecture.Application.Services
                 throw new RegistrationException($"User Registration Failed. {errors}", ErrorInformation.REGISTRATION_FAILED.ToString());
             }
 
-            var roleResult = await _userManager.AddToRoleAsync(user, Role.User.ToString());
+            var roleResult = await _userManager.AddToRoleAsync(user, roleName);
             if (!roleResult.Succeeded)
             {
                 var errors = string.Join(", ", roleResult.Errors.Select(e => e.Description));
